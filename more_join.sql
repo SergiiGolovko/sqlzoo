@@ -9,6 +9,79 @@
 
 # comment -> ord = 1 implies actor was a star (leading actor)		
 
+# Limbering up
+
+# 1. List the films where the yr is 1962 [Show id, title]
+SELECT id, title
+FROM movie
+WHERE yr=1962
+
+# 2. Give year of 'Citizen Kane'.
+SELECT yr
+FROM movie
+WHERE title = 'Citizen Kane'
+
+# 3. List all of the Star Trek movies, include the id, title and yr (all of these movies include the words Star Trek in the title). Order results by year.
+SELECT id, title, yr
+FROM movie
+WHERE title LIKE '%Star Trek'
+
+# 4. What are the titles of the films with id 11768, 11955, 21191?
+SELECT title
+FROM movie
+WHERE id IN (11768, 11955, 21191)
+
+# 5. What id number does the actress 'Glenn Close' have?
+SELECT id
+FROM actor
+WHERE name = 'Glenn Close'
+
+# 6. What is the id of the film 'Casablanca'
+SELECT id 
+FROM movie
+WHERE title = 'Casablanca'
+
+# Get to the point
+
+# 7. Obtain the cast list for 'Casablanca'.
+SELECT a.name
+FROM actor a
+JOIN casting c ON a.id = c.actorid
+WHERE c.movieid IN (SELECT m.id
+                    FROM movie m
+					WHERE m.title = 'Casablanca')
+
+# 8. Obtain the cast list for the film 'Alien'
+SELECT a.name
+FROM actor a
+JOIN casting c ON a.id = c.actorid
+WHERE c.movieid IN (SELECT m.id
+                    FROM movie m
+					WHERE m.title = 'Alien')
+					
+# 9. List the films in which 'Harrison Ford' has appeared
+SELECT m.title
+FROM movie m
+JOIN casting c ON m.id = c.movieid
+WHERE c.actorid IN (SELECT a.id
+                    FROM actor a
+				    WHERE a.name = 'Harrison Ford')
+					
+# 10. List the films where 'Harrison Ford' has appeared - but not in the starring role. [Note: the ord field of casting gives the position of the actor. If ord=1 then this actor is in the starring role]
+SELECT m.title
+FROM movie m
+JOIN casting c ON m.id = c.movieid
+WHERE (c.ord <> 1) AND (c.actorid IN (SELECT a.id
+                                      FROM actor a
+				                      WHERE a.name = 'Harrison Ford'))
+ 
+# 11. List the films together with the leading star for all 1962 films.
+SELECT m.title, a.name
+FROM movie m
+JOIN casting c ON m.id = c.movieid
+JOIN actor a ON a.id = c.actorid
+WHERE (m.yr = 1962) AND (c.ord = 1)
+ 
 # Harder Questions
 
 # 12. Which were the busiest years for 'John Travolta', show the year and the number of movies he made each year for any year in which he made more than 2 movies.
