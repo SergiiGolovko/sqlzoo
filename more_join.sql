@@ -1,11 +1,10 @@
 # Solutions to sqlzoo challenge
-# Self JOIN
+# More JOIN
 
 # Database -> Movie Database
 # movie(id, title, yr, director, budget, gross)
 # actor(id, name)
 # casting(movieid, actorid, ord)
-
 
 # comment -> ord = 1 implies actor was a star (leading actor)		
 
