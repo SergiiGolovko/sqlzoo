@@ -12,7 +12,55 @@ FROM goal g
 JOIN eteam e ON g.teamid = e.id
 WHERE e.teamname = 'Germany'
 
+# 2. Show id, stadium, team1, team2 for just game 1012
+SELECT DISTINCT ga.id, ga.stadium, ga.team1, ga.team2
+FROM game ga
+JOIN goal go ON go.matchid = ga.id
+WHERE go.matchid = 1012
 
+# 3. Show the player, teamid, stadium and mdate and for every German goal.
+SELECT go.player, go.teamid, ga.stadium, ga.mdate
+FROM goal go
+JOIN game ga ON go.matchid = ga.id
+JOIN eteam e ON go.teamid = e.id
+WHERE e.teamname = 'Germany' 
+
+# 4. Show the team1, team2 and player for every goal scored by a player called Mario.
+SELECT ga.team1, ga.team2, go.player
+FROM game ga
+JOIN goal go ON go.matchid = ga.id
+WHERE player LIKE 'Mario%'
+
+# 5. Show player, teamid, coach, gtime for all goals scored in the first 10 minutes.
+SELECT go.player, go.teamid, e.coach, go.gtime
+FROM goal go
+JOIN eteam e ON go.teamid = e.id
+WHERE go.gtime <= 10
+
+# 6. List the the dates of the matches and the name of the team in which 'Fernando Santos' was the team1 coach.
+SELECT ga.mdate, e.teamname
+FROM game ga
+JOIN eteam e ON e.id = ga.team1
+WHERE e.coach = 'Fernando Santos' 
+
+# 7. List the player for every goal scored in a game where the stadium was 'National Stadium, Warsaw'
+SELECT go.player
+FROM goal go
+JOIN game ga ON go.matchid = ga.id
+WHERE ga.stadium = 'National Stadium, Warsaw'
+
+# 8. Show the name of all players who scored a goal against Germany
+SELECT DISTINCT go.player
+FROM goal go
+JOIN game ga ON go.matchid = ga.id
+WHERE ((go.teamid = team1) AND (team2='GER')) OR ((go.teamid = team2) AND (team1='GER')) 
+
+# 9. Show teamname and the total number of goals scored.
+SELECT e.teamname, COUNT(e.teamname)
+FROM eteam e 
+LEFT JOIN goal go ON (e.id=go.teamid)
+GROUP BY e.teamname   
+ 
 # 10. Show the stadium and the number of goals scored in each stadium.
 SELECT ga.stadium, COUNT(go.matchid) AS ngoals
 FROM game ga
